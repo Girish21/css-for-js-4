@@ -60,7 +60,7 @@ const MainColumn = styled.div`
 
 const Header = styled.header`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
 
   & > label {
