@@ -31,20 +31,26 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
   const sale = variant === "on-sale";
-  const shouldShowTag = variant !== "default";
-  const tag = variant === "on-sale" ? "Sale" : "Just Released!";
 
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
-          {shouldShowTag && <Tag sale={sale}>{tag}</Tag>}
+          {variant === "on-sale" && <SaleTag>Sale</SaleTag>}
+          {variant === "new-release" && <NewTag>Just Released!</NewTag>}
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price strike={sale}>{formatPrice(price)}</Price>
+          <Price
+            style={{
+              "--color": sale ? COLORS.gray[700] : undefined,
+              "--text-decoration": sale ? "line-through" : undefined,
+            }}
+          >
+            {formatPrice(price)}
+          </Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize("Color", numOfColors)}</ColorInfo>
@@ -84,8 +90,8 @@ const Name = styled.h3`
 `;
 
 const Price = styled.span`
-  ${({ strike }) =>
-    strike && `color: ${COLORS.gray[700]}; text-decoration: line-through;`}
+  color: var(--color);
+  text-decoration: var(--text-decoration);
 `;
 
 const ColorInfo = styled.p`
@@ -106,7 +112,14 @@ const Tag = styled.span`
   padding: 8px;
   font-size: 14px;
   font-weight: ${WEIGHTS.bold};
-  ${({ sale }) => `background: ${sale ? COLORS.primary : COLORS.secondary}`}
+`;
+
+const SaleTag = styled(Tag)`
+  background: ${COLORS.primary};
+`;
+
+const NewTag = styled(Tag)`
+  background: ${COLORS.secondary};
 `;
 
 export default ShoeCard;
